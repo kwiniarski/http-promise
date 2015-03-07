@@ -17,7 +17,7 @@
 
 var util = require('util')
   , http = require('http')
-  , Promise = require('bluebird/js/main/promise')()
+  , BluebirdPromise = require('bluebird/js/main/promise')()
   , slice = Array.prototype.slice;
 
 function defaultHandler(resolve, reject) {
@@ -28,7 +28,7 @@ function defaultHandler(resolve, reject) {
     }
     this.removeListener('error', reject);
     resolve(this);
-  }
+  };
 }
 
 function ServerPromisified(requestListener) {
@@ -39,7 +39,7 @@ util.inherits(ServerPromisified, http.Server);
 
 ServerPromisified.prototype.listenAsync = function (path) {
   var httpServer = this;
-  return new Promise(function (resolve, reject) {
+  return new BluebirdPromise(function (resolve, reject) {
     if (httpServer instanceof http.Server === false) {
       reject(new Error('Server not initialized'));
     }
@@ -51,7 +51,7 @@ ServerPromisified.prototype.listenAsync = function (path) {
 
 ServerPromisified.prototype.closeAsync = function () {
   var httpServer = this;
-  return new Promise(function (resolve, reject) {
+  return new BluebirdPromise(function (resolve, reject) {
 
     // Hack for Node v0.10.x which was returning
     // Error: Not running when server was not running
@@ -77,7 +77,7 @@ ServerPromisified.prototype.closeAsync = function () {
 };
 
 http.createServerAsync = function (requestListener) {
-  return new Promise(function (resolve, reject) {
+  return new BluebirdPromise(function (resolve, reject) {
     try {
       resolve(new ServerPromisified(requestListener));
     } catch (error) {
@@ -86,14 +86,14 @@ http.createServerAsync = function (requestListener) {
   });
 };
 
-Promise.prototype.listen = function () {
+BluebirdPromise.prototype.listen = function () {
   var args = slice.call(arguments, 0);
   return this.then(function (server) {
     return server.listenAsync.apply(server, args);
   });
 };
 
-Promise.prototype.close = function () {
+BluebirdPromise.prototype.close = function () {
   return this.then(function (server) {
     return server.closeAsync();
   });

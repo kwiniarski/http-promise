@@ -30,6 +30,16 @@ describe 'Promisified HTTP module', ->
     it 'should return promise when server is called to close', ->
       expect(server.close()).to.have.property('then').and.is.a('function')
 
+  describe 'error handling', ->
+
+    it 'should catch errors when server is created', ->
+      http.createServerAsync true
+        .catch (err) -> expect(err).to.be.instanceof(TypeError)
+
+    it 'should catch errors when server starts', ->
+      http.createServerAsync().listen PORT
+        .catch (err) -> expect(err).to.be.instanceof(Error).and.have.property 'code', 'EADDRINUSE'
+
   describe 'server instance', ->
 
     beforeEach ->
