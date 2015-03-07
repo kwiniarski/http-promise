@@ -4,7 +4,8 @@
   "description": "HTTP server based on Promises",
   "main": "index.js",
   "scripts": {
-    "test": "node node_modules/mocha/bin/mocha test/spec"
+    "test": "node node_modules/mocha/bin/mocha test/spec",
+    "codeclimate": "node node_modules/codeclimate-test-reporter/bin/codeclimate.js < coverage.lcov"
   },
   "repository": {
     "type": "git",
@@ -15,15 +16,26 @@
     "server",
     "promise"
   ],
+  "config": {
+    "blanket": {
+      "data-cover-only": "index.js",
+      "data-cover-never": "node_modules"
+    }
+  },
   "author": "Krzysztof Winiarski",
   "license": "MIT",
   "dependencies": {
     "bluebird": "^2.9.13"
   },
   "devDependencies": {
+    "blanket": "^1.1.6",
     "chai": "^2.1.1",
     "chai-http": "^1.0.0",
+    "codeclimate-test-reporter": "0.0.4",
     "coffee-script": "^1.9.1",
-    "mocha": "^2.1.0"
+    "mocha": "^2.1.0",
+    "mocha-lcov-reporter": "0.0.2",
+    "mocha-multi": "^0.6.0",
+    "mocha-text-cov": "^0.1.0"
   }
 }

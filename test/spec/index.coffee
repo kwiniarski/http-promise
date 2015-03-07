@@ -13,6 +13,7 @@ describe 'Promisified HTTP module', ->
       res.statusCode = 200
       res.setHeader 'Content-Type', 'text/html'
       res.end()
+    server.listen PORT
 
   afterEach ->
     agent = null
@@ -33,7 +34,6 @@ describe 'Promisified HTTP module', ->
 
     beforeEach ->
       agent = request 'http://localhost:' + PORT
-      server.listen PORT
 
     it 'should be an instance of http.Server', ->
       server.then (server) ->
