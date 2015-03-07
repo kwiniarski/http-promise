@@ -52,10 +52,27 @@ ServerPromisified.prototype.listenAsync = function (path) {
 ServerPromisified.prototype.closeAsync = function () {
   var httpServer = this;
   return new Promise(function (resolve, reject) {
+
+    // Hack for Node v0.10.x which was returning
+    // Error: Not running when server was not running
+    // or close() has been called more than once.
+    if (httpServer._closed === true) {
+      resolve(httpServer);
+      return;
+    }
+
     httpServer
       .once('error', reject)
       .once('close', defaultHandler(resolve, reject))
-      .close();
+      .once('close', function () {
+        httpServer._closed = true;
+      });
+
+    try {
+      httpServer.close();
+    } catch (err) {
+      reject(err);
+    }
   });
 };
 
