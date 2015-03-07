@@ -1,0 +1,29 @@
+{
+  "name": "http-promise",
+  "version": "0.1.0",
+  "description": "HTTP server based on Promises",
+  "main": "index.js",
+  "scripts": {
+    "test": "node node_modules/mocha/bin/mocha test/spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@github.com:kwiniarski/http-promise.git"
+  },
+  "keywords": [
+    "http",
+    "server",
+    "promise"
+  ],
+  "author": "Krzysztof Winiarski",
+  "license": "MIT",
+  "dependencies": {
+    "bluebird": "^2.9.13"
+  },
+  "devDependencies": {
+    "chai": "^2.1.1",
+    "chai-http": "^1.0.0",
+    "coffee-script": "^1.9.1",
+    "mocha": "^2.1.0"
+  }
+}

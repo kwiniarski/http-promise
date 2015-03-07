@@ -1,0 +1,86 @@
+'use strict';
+
+/**
+ * @example
+ *
+ * http.createServerAsync()
+ *   .listen(8000)
+ *   .tap(function (server) {
+ *          console.log(server.address());
+ *      })
+ *   .delay(5000)
+ *   .close()
+ *   .then(console.log)
+ *   .catch(console.error);
+ *
+ */
+
+var util = require('util')
+  , http = require('http')
+  , Promise = require('bluebird/js/main/promise')()
+  , slice = Array.prototype.slice;
+
+function defaultHandler(resolve, reject) {
+  return function (error) {
+    if (error) {
+      reject(error);
+      return;
+    }
+    this.removeListener('error', reject);
+    resolve(this);
+  }
+}
+
+function ServerPromisified(requestListener) {
+  return http.Server.call(this, requestListener);
+}
+
+util.inherits(ServerPromisified, http.Server);
+
+ServerPromisified.prototype.listenAsync = function (path) {
+  var httpServer = this;
+  return new Promise(function (resolve, reject) {
+    if (httpServer instanceof http.Server === false) {
+      reject(new Error('Server not initialized'));
+    }
+    httpServer
+      .once('error', reject)
+      .listen(path, defaultHandler(resolve, reject));
+  });
+};
+
+ServerPromisified.prototype.closeAsync = function () {
+  var httpServer = this;
+  return new Promise(function (resolve, reject) {
+    httpServer
+      .once('error', reject)
+      .once('close', defaultHandler(resolve, reject))
+      .close();
+  });
+};
+
+http.createServerAsync = function (requestListener) {
+  return new Promise(function (resolve, reject) {
+    try {
+      resolve(new ServerPromisified(requestListener));
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+Promise.prototype.listen = function () {
+  var args = slice.call(arguments, 0);
+  return this.then(function (server) {
+    return server.listenAsync.apply(server, args);
+  });
+};
+
+Promise.prototype.close = function () {
+  return this.then(function (server) {
+    return server.closeAsync();
+  });
+};
+
+http.ServerPromisified = ServerPromisified;
+exports = module.exports = http;
