@@ -1,6 +1,6 @@
 {
   "name": "http-promise",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "HTTP server based on Promises",
   "main": "index.js",
   "scripts": {
