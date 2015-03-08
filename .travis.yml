@@ -9,5 +9,7 @@ deploy:
   api_key:
     secure: Ur4dkzqjKeKWAga+Hi4lpFGG7EMqJ//YXLFAKV0K2syQ8Cr5w9UadDhLjmjujdk8Og7MCroh9YloYdffMDb3DW8WMqen2GvapeEbjglaoLAwFImdkD3ChJWz+GYgMG6ARw5AZo7iEB8CgK7JPtS27pPSvOWv3uoWB1ZEFclEpIU=
   on:
+    node: 0.12
     tags: true
+    branch: master
     repo: kwiniarski/http-promise
