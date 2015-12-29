@@ -17,7 +17,7 @@
 
 var util = require('util')
   , http = require('http')
-  , BluebirdPromise = require('bluebird/js/main/promise')()
+  , BluebirdPromise = require('bluebird/js/release/promise')()
   , slice = Array.prototype.slice;
 
 function defaultHandler(resolve, reject) {
