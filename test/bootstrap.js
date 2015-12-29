@@ -1,11 +1,9 @@
 'use strict';
 
 var chai = require('chai');
-var blanket = require('blanket');
 
-process.env.multi = 'spec=- mocha-text-cov=- mocha-lcov-reporter=coverage.lcov';
-
-blanket();
+process.env.multi = 'spec=- mocha-lcov-reporter=coverage.lcov';
+require('blanket');
 
 chai.use(require('chai-http'));
 chai.request.addPromises(require('bluebird'));

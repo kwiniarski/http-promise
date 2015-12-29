@@ -4,7 +4,7 @@ http = require '../../index'
 
 describe 'Promisified HTTP module', ->
 
-  PORT = 8000
+  PORT = 3132
   server = null
   agent = null
 
